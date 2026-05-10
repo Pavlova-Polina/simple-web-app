@@ -1,22 +1,10 @@
 package chnu.edu.pz.simplewebapp.service;
 
-
-/*
-  @author   george
-  @project   simple-web-app
-  @class  ItemService
-  @version  1.0.0 
-  @since 12.10.25 - 20.27
-*/
-
 import chnu.edu.pz.simplewebapp.model.Item;
 import chnu.edu.pz.simplewebapp.repository.ItemRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -25,42 +13,27 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    private List<Item> items = new ArrayList<>(
-            Arrays.asList(
-                    new Item("1", " name1", "001", "d1"),
-                    new Item("2", " name2", "002", "d2"),
-                    new Item("3", " name3", "003", "d3")
+    public Item save(Item item) {
+        return itemRepository.save(item);
+    }
 
-            )
-    );
-
-  //  @PostConstruct
-//    void init(){
-//        itemRepository.saveAll(items);
-//    }
-
-
-
-    public List<Item> getItems(){
+    public List<Item> findAll() {
         return itemRepository.findAll();
     }
 
-    public Item create(Item item) {
+    public Item findById(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+    }
+
+    public Item update(Long id, Item newItem) {
+        Item item = findById(id);
+        item.setName(newItem.getName());
+        item.setPrice(newItem.getPrice());
         return itemRepository.save(item);
     }
 
-    public Item getItem(String id) {
-      return   itemRepository.findById(id).get();
-    }
-
-    public void delete(String id) {
+    public void delete(Long id) {
         itemRepository.deleteById(id);
-    }
-
-    public Item update(Item item) {
-        if (item.getId() == null) {
-            return null;
-        }
-        return itemRepository.save(item);
     }
 }

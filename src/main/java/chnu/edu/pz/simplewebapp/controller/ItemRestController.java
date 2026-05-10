@@ -1,14 +1,5 @@
 package chnu.edu.pz.simplewebapp.controller;
 
-
-/*
-  @author   george
-  @project   simple-web-app
-  @class  ItemRestController
-  @version  1.0.0 
-  @since 12.10.25 - 20.20
-*/
-
 import chnu.edu.pz.simplewebapp.model.Item;
 import chnu.edu.pz.simplewebapp.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -17,51 +8,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/items/")
+@RequestMapping("/api/items")
 @RequiredArgsConstructor
 public class ItemRestController {
 
     private final ItemService itemService;
 
-    @RequestMapping("hello")
-    public String hello(){
-        return "hello from rest controller";
-    }
-
-    @GetMapping("")
-    public List<Item> getAllItems(){
-        return itemService.getItems();
-    }
-
-    // CRUD  -  create read update delete
-
     @PostMapping
-    public Item createItem(@RequestBody Item item){
-        return itemService.create(item);
+    public Item create(@RequestBody Item item) {
+        return itemService.save(item);
     }
 
-    @GetMapping("{id}")
-    public Item getAOneItem(@PathVariable String id){
-        return itemService.getItem(id);
+    @GetMapping
+    public List<Item> getAll() {
+        return itemService.findAll();
     }
 
-     @DeleteMapping("{id}")
-    public void deleteAOneItem(@PathVariable String id){
+    @GetMapping("/{id}")
+    public Item getById(@PathVariable Long id) {
+        return itemService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Item update(@PathVariable Long id, @RequestBody Item item) {
+        return itemService.update(id, item);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
         itemService.delete(id);
     }
-
-
-    @PutMapping
-    public Item updateItem(@RequestBody Item item){
-        return itemService.update(item);
-    }
-
-
-
-
-
-
-
-
-
 }
